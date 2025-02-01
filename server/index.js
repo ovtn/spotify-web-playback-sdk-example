@@ -1,17 +1,22 @@
-const express = require('express')
+const path = require('path');
+const express = require('express');
 const request = require('request');
 const dotenv = require('dotenv');
-
-const port = 5000
 
 global.access_token = ''
 
 dotenv.config()
 
+//const port = 5000
+const port = process.env.SPOTIFY_SERVER_PORT
+
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
-var spotify_redirect_uri = 'http://localhost:3000/auth/callback'
+//var spotify_redirect_uri = 'http://localhost:3000/auth/callback'
+//var spotify_redirect_uri = 'http://192.168.1.26:3000/auth/callback'
+var spotify_redirect_uri = process.env.SPOTIFY_REDIRECT_URI
+
 
 var generateRandomString = function (length) {
   var text = '';
@@ -24,6 +29,9 @@ var generateRandomString = function (length) {
 };
 
 var app = express();
+
+app.use(express.static(path.join(__dirname, '../build')));
+
 
 app.get('/auth/login', (req, res) => {
 
